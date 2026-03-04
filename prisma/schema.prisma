@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  date      DateTime
+  time      String
+  guests    Int
+  note      String?
+  status    String   @default("pending") // pending, confirmed, cancelled
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  name       String
+  phone      String
+  email      String?
+  pickupTime String
+  note       String?
+  status     String      @default("pending") // pending, confirmed, ready, completed, cancelled
+  totalPrice Int         // v halerich
+  items      OrderItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  name     String
+  price    Int    // v halerich
+  quantity Int
+}
+
+model EventInquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  eventType String
+  date      DateTime
+  guests    Int
+  message   String?
+  status    String   @default("new") // new, contacted, confirmed, cancelled
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model WeeklyMenu {
+  id        String         @id @default(cuid())
+  weekStart DateTime
+  active    Boolean        @default(true)
+  items     WeeklyMenuItem[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model WeeklyMenuItem {
+  id           String     @id @default(cuid())
+  weeklyMenuId String
+  weeklyMenu   WeeklyMenu @relation(fields: [weeklyMenuId], references: [id], onDelete: Cascade)
+  day          String     // monday, tuesday, wednesday, thursday, friday
+  soup         String
+  mainDish1    String
+  mainDish2    String?
+  price        Int        // v halerich
+  sortOrder    Int        @default(0)
+}
+
+model AdminUser {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String // bcrypt hash
+  name     String
+}

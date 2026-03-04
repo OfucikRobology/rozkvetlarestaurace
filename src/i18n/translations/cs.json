@@ -1,0 +1,195 @@
+{
+  "nav": {
+    "home": "Domů",
+    "menu": "Jídelní lístek",
+    "reservation": "Rezervace",
+    "takeaway": "S sebou",
+    "celebrations": "Oslavy",
+    "gallery": "Galerie",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "title": "Rozkvetlá Restaurace",
+    "subtitle": "Kde se česká a ukrajinská kuchyně setkávají v květinové harmonii",
+    "cta": "Rezervovat stůl",
+    "description": "Přijďte ochutnat spojení nejlepších českých a ukrajinských receptů v útulném prostředí plném květin a zeleně. Vaříme s láskou, podáváme s úsměvem."
+  },
+  "about": {
+    "title": "O nás",
+    "text1": "Rozkvetlá restaurace je útulné místo v srdci Prahy 10, kde se potkávají dvě bohaté kulinářské tradice - česká a ukrajinská. Naše kuchyně vaří z čerstvých surovin, s láskou a péčí, jako kdybyste přišli na návštěvu k babičce.",
+    "text2": "Náš interiér je plný živých květin a rostlin, které vytvářejí jedinečnou atmosféru klidu a pohody. Věříme, že dobré jídlo chutná ještě lépe v krásném prostředí obklopeném přírodou.",
+    "flowerShop": "Součástí naší restaurace je malý květinový koutek, kde si můžete pořídit čerstvou kytici nebo pokojovou rostlinu."
+  },
+  "menu": {
+    "title": "Jídelní lístek",
+    "weeklyMenu": "Týdenní menu",
+    "permanentMenu": "Stálá nabídka",
+    "drinks": "Nápoje",
+    "categories": {
+      "appetizers": "Předkrmy",
+      "soups": "Polévky",
+      "mainCourses": "Hlavní chody",
+      "desserts": "Dezerty",
+      "drinks": "Nápoje"
+    },
+    "weekDays": {
+      "monday": "Pondělí",
+      "tuesday": "Úterý",
+      "wednesday": "Středa",
+      "thursday": "Čtvrtek",
+      "friday": "Pátek"
+    },
+    "soup": "Polévka",
+    "mainDish": "Hlavní jídlo",
+    "price": "Cena",
+    "nesnezenoLink": "Kompletní menu najdete také na Nesnězeno"
+  },
+  "reservation": {
+    "title": "Rezervace",
+    "subtitle": "Zarezervujte si svůj stůl v Rozkvetlé restauraci",
+    "form": {
+      "name": "Jméno a příjmení",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "date": "Datum",
+      "time": "Čas",
+      "guests": "Počet hostů",
+      "note": "Poznámka (alergie, speciální požadavky...)",
+      "submit": "Odeslat rezervaci"
+    },
+    "success": "Děkujeme! Vaše rezervace byla úspěšně odeslána. Brzy vás budeme kontaktovat s potvrzením.",
+    "error": "Omlouváme se, při odesílání rezervace došlo k chybě. Zkuste to prosím znovu nebo nám zavolejte.",
+    "capacity": "Kapacita restaurace je omezena. Pro větší skupiny nás prosím kontaktujte telefonicky.",
+    "maxGuests": "Pro rezervaci nad 15 osob nás prosím kontaktujte přímo na tel. 731 163 777."
+  },
+  "takeaway": {
+    "title": "Jídlo s sebou",
+    "subtitle": "Vychutnejte si naše pokrmy i doma",
+    "description": "Objednejte si naše oblíbené pokrmy s sebou. Připravíme vám je čerstvé k vyzvednutí v restauraci.",
+    "form": {
+      "name": "Jméno a příjmení",
+      "phone": "Telefon",
+      "email": "E-mail",
+      "pickupTime": "Čas vyzvednutí",
+      "note": "Poznámka k objednávce",
+      "submit": "Odeslat objednávku"
+    },
+    "cart": {
+      "title": "Vaše objednávka",
+      "empty": "Košík je prázdný. Vyberte si z nabídky.",
+      "total": "Celkem",
+      "addItem": "Přidat",
+      "removeItem": "Odebrat"
+    },
+    "success": "Děkujeme za objednávku! Vaše jídlo bude připraveno k vyzvednutí ve zvoleném čase.",
+    "nearbySchool": "Nabízíme zvýhodněné obědy pro studenty a zaměstnance okolních škol."
+  },
+  "celebrations": {
+    "title": "Oslavy a akce",
+    "subtitle": "Oslavte své výjimečné chvíle s námi",
+    "description": "Rozkvetlá restaurace je ideálním místem pro vaše rodinné oslavy, firemní akce i svatební hostiny. Postaráme se o vše, abyste si svůj den užili naplno.",
+    "types": {
+      "wedding": "Svatby",
+      "birthday": "Narozeniny",
+      "corporate": "Firemní akce",
+      "christening": "Křtiny"
+    },
+    "typesDesc": {
+      "wedding": "Romantická svatební hostina v květinovém prostředí s kompletním servisem.",
+      "birthday": "Narozeninové oslavy pro děti i dospělé s animačním programem.",
+      "corporate": "Firemní večírky, teambuildingy a konference v profesionálním prostředí.",
+      "christening": "Intimní oslava křtin s výzdobou a dětským menu na míru."
+    },
+    "packages": {
+      "childcare": "Dětský koutek s hlídáním",
+      "decoration": "Květinová výzdoba na míru",
+      "catering": "Catering a rautové menu"
+    },
+    "themes": {
+      "fairytale": "Pohádkový motiv",
+      "nature": "Přírodní styl",
+      "vintage": "Vintage elegance",
+      "ukrainian": "Ukrajinská tradice"
+    },
+    "themesDesc": {
+      "fairytale": "Kouzelná výzdoba s pastelovou barevností, třpytkami a pohádkovými prvky.",
+      "nature": "Rustikální styl s živými květinami, dřevem a přírodními materiály.",
+      "vintage": "Elegantní retro atmosféra s krajkami, starožitnostmi a tlumenými barvami.",
+      "ukrainian": "Autentická ukrajinská tradice s výšivkami, věnečky a tradiční keramikou."
+    },
+    "form": {
+      "name": "Jméno a příjmení",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "eventType": "Typ akce",
+      "date": "Požadovaný termín",
+      "guests": "Předpokládaný počet hostů",
+      "message": "Popište svou představu",
+      "submit": "Odeslat poptávku"
+    },
+    "success": "Děkujeme za váš zájem! Ozveme se vám do 24 hodin s nabídkou na míru."
+  },
+  "gallery": {
+    "title": "Galerie",
+    "subtitle": "Nahlédněte do naší Rozkvetlé restaurace",
+    "categories": {
+      "food": "Naše pokrmy",
+      "interior": "Interiér",
+      "events": "Akce a oslavy",
+      "decoration": "Květinová výzdoba"
+    }
+  },
+  "contact": {
+    "title": "Kontakt",
+    "address": "Topolová 2916/14, Praha 10 - Záběhlice",
+    "phone": "731 163 777",
+    "email": "verunkatarhaj@seznam.cz",
+    "openingHours": "Otevírací doba",
+    "hours": {
+      "monThu": "Po - Čt: 11:00 - 22:00",
+      "fri": "Pá: 11:00 - 23:00",
+      "sat": "So: 12:00 - 23:00",
+      "sun": "Ne: 12:00 - 21:00"
+    },
+    "form": {
+      "name": "Jméno a příjmení",
+      "email": "E-mail",
+      "subject": "Předmět",
+      "message": "Vaše zpráva",
+      "submit": "Odeslat zprávu"
+    },
+    "success": "Děkujeme za vaši zprávu! Odpovíme vám co nejdříve."
+  },
+  "footer": {
+    "copyright": "Rozkvetlá Restaurace. Všechna práva vyhrazena.",
+    "privacy": "Ochrana osobních údajů",
+    "terms": "Obchodní podmínky",
+    "followUs": "Sledujte nás",
+    "nesnezenoText": "Naše denní menu najdete také na Nesnězeno.cz"
+  },
+  "common": {
+    "loading": "Načítání...",
+    "error": "Něco se pokazilo. Zkuste to prosím znovu.",
+    "backToHome": "Zpět na úvodní stránku",
+    "readMore": "Zjistit více",
+    "seeAll": "Zobrazit vše",
+    "close": "Zavřít",
+    "language": "Jazyk",
+    "czk": "Kč"
+  },
+  "cookie": {
+    "text": "Tyto stránky používají cookies pro zajištění nejlepšího zážitku na našem webu.",
+    "accept": "Přijmout",
+    "decline": "Odmítnout",
+    "settings": "Nastavení cookies"
+  },
+  "admin": {
+    "login": "Přihlášení",
+    "dashboard": "Přehled",
+    "reservations": "Rezervace",
+    "orders": "Objednávky",
+    "weeklyMenu": "Týdenní menu",
+    "messages": "Zprávy",
+    "logout": "Odhlásit se"
+  }
+}
