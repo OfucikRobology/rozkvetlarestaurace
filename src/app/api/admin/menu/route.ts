@@ -32,17 +32,25 @@ async function seedIfEmpty() {
 }
 
 export async function GET() {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await seedIfEmpty();
+
+    const items = await prisma.menuItemDB.findMany({
+      orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
+    });
+
+    return NextResponse.json(items);
+  } catch (error) {
+    console.error("Admin menu error:", error);
+    return NextResponse.json(
+      { error: "Chyba serveru", detail: String(error) },
+      { status: 500 }
+    );
   }
-
-  await seedIfEmpty();
-
-  const items = await prisma.menuItemDB.findMany({
-    orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
-  });
-
-  return NextResponse.json(items);
 }
 
 export async function POST(req: NextRequest) {

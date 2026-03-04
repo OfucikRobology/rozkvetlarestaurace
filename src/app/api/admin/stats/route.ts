@@ -3,38 +3,46 @@ import { prisma } from "@/lib/db";
 import { isAuthenticated } from "@/lib/auth";
 
 export async function GET() {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [
+      totalReservations,
+      todayReservations,
+      pendingOrders,
+      unreadMessages,
+      totalEvents,
+    ] = await Promise.all([
+      prisma.reservation.count(),
+      prisma.reservation.count({
+        where: { date: { gte: today } },
+      }),
+      prisma.order.count({
+        where: { status: { in: ["pending", "confirmed"] } },
+      }),
+      prisma.contactMessage.count({
+        where: { read: false },
+      }),
+      prisma.eventInquiry.count(),
+    ]);
+
+    return NextResponse.json({
+      totalReservations,
+      todayReservations,
+      pendingOrders,
+      unreadMessages,
+      totalEvents,
+    });
+  } catch (error) {
+    console.error("Admin stats error:", error);
+    return NextResponse.json(
+      { error: "Chyba serveru", detail: String(error) },
+      { status: 500 }
+    );
   }
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const [
-    totalReservations,
-    todayReservations,
-    pendingOrders,
-    unreadMessages,
-    totalEvents,
-  ] = await Promise.all([
-    prisma.reservation.count(),
-    prisma.reservation.count({
-      where: { date: { gte: today } },
-    }),
-    prisma.order.count({
-      where: { status: { in: ["pending", "confirmed"] } },
-    }),
-    prisma.contactMessage.count({
-      where: { read: false },
-    }),
-    prisma.eventInquiry.count(),
-  ]);
-
-  return NextResponse.json({
-    totalReservations,
-    todayReservations,
-    pendingOrders,
-    unreadMessages,
-    totalEvents,
-  });
 }
