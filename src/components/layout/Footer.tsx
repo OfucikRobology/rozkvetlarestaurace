@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Flower2, Phone, Mail, MapPin, ExternalLink } from "lucide-react";
+import { Phone, Mail, MapPin, ExternalLink } from "lucide-react";
+import { IconBloom } from "@/components/icons";
 import { useLocale } from "@/lib/locale-context";
 import { contactInfo, openingHours, NAV_LINKS } from "@/data/restaurant";
 
@@ -15,7 +16,7 @@ export function Footer() {
           {/* Logo a popis */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <Flower2 className="h-8 w-8 text-primary" />
+              <IconBloom className="h-8 w-8 text-primary" />
               <span className="font-serif text-xl font-semibold">
                 Rozkvetlá restaurace
               </span>

@@ -16,14 +16,8 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import {
-  CalendarDays,
-  Clock,
-  Users,
-  Send,
-  Flower2,
-  Info,
-} from "lucide-react";
+import { CalendarDays, Clock, Users, Send, Info } from "lucide-react";
+import { IconBloom } from "@/components/icons";
 
 // Generate time slots from 11:00 to 21:00 in 30-minute intervals
 function generateTimeSlots(): string[] {
@@ -140,7 +134,7 @@ export default function ReservationPage() {
         <div className="absolute inset-0 bg-[url('/images/pattern-flowers.svg')] opacity-10" />
         <div className="container relative mx-auto px-4 text-center">
           <AnimatedSection>
-            <Flower2 className="mx-auto mb-4 h-12 w-12 text-green-300" />
+            <IconBloom className="mx-auto mb-4 h-12 w-12 text-green-300" />
             <h1 className="font-serif text-4xl font-bold tracking-tight md:text-5xl">
               {t("reservation.title")}
             </h1>

@@ -5,66 +5,35 @@ import { useLocale } from "@/lib/locale-context";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { featuredItems } from "@/data/menu";
 import { openingHours } from "@/data/restaurant";
+import { ArrowRight } from "lucide-react";
 import {
-  Flower2,
-  ArrowRight,
-  UtensilsCrossed,
-  Clock,
-  PartyPopper,
-  Leaf,
-  Sprout,
-} from "lucide-react";
-
-/* ──────────────────────────────────────────────
-   Decorative SVG leaf used in the hero section
-   ────────────────────────────────────────────── */
-function DecoLeaf({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 120 120"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <path
-        d="M60 10C60 10 25 35 25 70C25 90 40 110 60 110C80 110 95 90 95 70C95 35 60 10 60 10Z"
-        fill="currentColor"
-        fillOpacity="0.08"
-      />
-      <path
-        d="M60 30V95"
-        stroke="currentColor"
-        strokeOpacity="0.12"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M60 50C45 45 35 55 35 55"
-        stroke="currentColor"
-        strokeOpacity="0.10"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M60 65C75 60 85 70 85 70"
-        stroke="currentColor"
-        strokeOpacity="0.10"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+  IconBloom,
+  IconDining,
+  IconTime,
+  IconLeaf,
+  IconSprout,
+  IconCelebration,
+  DecoLeaf,
+  FloralDivider,
+} from "@/components/icons";
+import {
+  IllustrationPlate,
+  IllustrationBowl,
+  IllustrationDumplings,
+  IllustrationCake,
+} from "@/components/illustrations";
 
 /* ──────────────────────────────────────────────
    Gradient placeholder for menu-card images
    ────────────────────────────────────────────── */
 const cardGradients = [
-  "from-[#e8f0eb] to-[#f3eff8]",
-  "from-[#faf3e0] to-[#e8f0eb]",
-  "from-[#f3eff8] to-[#faf3e0]",
-  "from-[#f8eff2] to-[#e8f0eb]",
+  "from-amber-50/80 via-orange-50/40 to-green-50/50",
+  "from-stone-50/80 via-emerald-50/40 to-amber-50/50",
+  "from-rose-50/60 via-amber-50/40 to-orange-50/50",
+  "from-teal-50/60 via-lime-50/40 to-amber-50/50",
 ];
+
+const cardIllustrations = [IllustrationPlate, IllustrationBowl, IllustrationDumplings, IllustrationCake];
 
 /* ──────────────────────────────────────────────
    Homepage
@@ -81,19 +50,19 @@ export default function HomePage() {
         <DecoLeaf className="pointer-events-none absolute -right-8 bottom-16 h-36 w-36 text-primary opacity-40 rotate-[30deg]" />
 
         <div className="pointer-events-none absolute left-1/2 top-6 -translate-x-1/2">
-          <Flower2
+          <IconBloom
             className="h-10 w-10 text-primary opacity-15"
             strokeWidth={1.2}
           />
         </div>
         <div className="pointer-events-none absolute bottom-12 left-16 hidden md:block">
-          <Sprout
+          <IconSprout
             className="h-8 w-8 text-primary opacity-15"
             strokeWidth={1.2}
           />
         </div>
         <div className="pointer-events-none absolute right-20 top-24 hidden md:block">
-          <Leaf
+          <IconLeaf
             className="h-9 w-9 text-primary opacity-12 rotate-45"
             strokeWidth={1.2}
           />
@@ -101,11 +70,7 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:py-40">
           {/* Flower divider above title */}
-          <div className="mb-6 flex items-center justify-center gap-3">
-            <span className="h-px w-12 bg-primary/25" />
-            <Flower2 className="h-5 w-5 text-primary/50" strokeWidth={1.5} />
-            <span className="h-px w-12 bg-primary/25" />
-          </div>
+          <FloralDivider className="mb-6" />
 
           <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             <span className="text-gradient-nature">{t("hero.title")}</span>
@@ -132,7 +97,7 @@ export default function HomePage() {
               href="/menu"
               className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-8 py-3.5 text-base font-semibold text-foreground backdrop-blur-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <UtensilsCrossed className="h-4 w-4" />
+              <IconDining className="h-4 w-4" />
               {t("menu.title")}
             </Link>
           </div>
@@ -148,7 +113,7 @@ export default function HomePage() {
                 {t("about.title")}
               </h2>
               <div className="divider-floral mx-auto mt-4 max-w-xs">
-                <Leaf className="h-4 w-4 shrink-0 text-primary/50" />
+                <IconLeaf className="h-4 w-4 shrink-0 text-primary/50" />
               </div>
             </div>
           </AnimatedSection>
@@ -169,7 +134,7 @@ export default function HomePage() {
 
           <AnimatedSection delay={0.3}>
             <div className="mt-10 rounded-2xl border border-border bg-gradient-nature p-6 text-center shadow-sm sm:p-8">
-              <Flower2
+              <IconBloom
                 className="mx-auto mb-3 h-8 w-8 text-primary/70"
                 strokeWidth={1.5}
               />
@@ -195,48 +160,50 @@ export default function HomePage() {
                   : "\u0421\u043a\u0443\u0448\u0442\u0443\u0439\u0442\u0435 \u043d\u0430\u0439\u043a\u0440\u0430\u0449\u0435 \u0437 \u0447\u0435\u0441\u044c\u043a\u043e\u0457 \u0442\u0430 \u0443\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u043e\u0457 \u043a\u0443\u0445\u043d\u0456"}
               </p>
               <div className="divider-floral mx-auto mt-4 max-w-xs">
-                <UtensilsCrossed className="h-4 w-4 shrink-0 text-primary/50" />
+                <IconDining className="h-4 w-4 shrink-0 text-primary/50" />
               </div>
             </div>
           </AnimatedSection>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredItems.map((item, idx) => (
-              <AnimatedSection key={item.id} delay={0.1 + idx * 0.1}>
-                <div className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
-                  {/* Gradient placeholder image area */}
-                  <div
-                    className={`relative flex h-44 items-center justify-center bg-gradient-to-br ${cardGradients[idx % cardGradients.length]}`}
-                  >
-                    <UtensilsCrossed
-                      className="h-10 w-10 text-primary/25 transition-transform group-hover:scale-110"
-                      strokeWidth={1.2}
-                    />
-                  </div>
+            {featuredItems.map((item, idx) => {
+              const Illustration = cardIllustrations[idx % cardIllustrations.length];
+              return (
+                <AnimatedSection key={item.id} delay={0.1 + idx * 0.1}>
+                  <div className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
+                    {/* Illustrated placeholder image area */}
+                    <div
+                      className={`relative flex h-44 items-center justify-center bg-gradient-to-br ${cardGradients[idx % cardGradients.length]}`}
+                    >
+                      <Illustration
+                        className="h-28 w-28 text-primary/50 transition-transform group-hover:scale-110"
+                      />
+                    </div>
 
-                  {/* Card body */}
-                  <div className="p-5">
-                    <h3 className="font-serif text-lg font-semibold leading-snug">
-                      {item.name[locale]}
-                    </h3>
-                    <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
-                      {item.description[locale]}
-                    </p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="text-lg font-bold text-primary">
-                        {item.price}&nbsp;{t("common.czk")}
-                      </span>
-                      {item.allergens && item.allergens.length > 0 && (
-                        <span className="text-xs text-muted-foreground/70">
-                          {locale === "cs" ? "Alergeny" : "\u0410\u043b\u0435\u0440\u0433\u0435\u043d\u0438"}:{" "}
-                          {item.allergens.join(", ")}
+                    {/* Card body */}
+                    <div className="p-5">
+                      <h3 className="font-serif text-lg font-semibold leading-snug">
+                        {item.name[locale]}
+                      </h3>
+                      <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
+                        {item.description[locale]}
+                      </p>
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="text-lg font-bold text-primary">
+                          {item.price}&nbsp;{t("common.czk")}
                         </span>
-                      )}
+                        {item.allergens && item.allergens.length > 0 && (
+                          <span className="text-xs text-muted-foreground/70">
+                            {locale === "cs" ? "Alergeny" : "\u0410\u043b\u0435\u0440\u0433\u0435\u043d\u0438"}:{" "}
+                            {item.allergens.join(", ")}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </AnimatedSection>
-            ))}
+                </AnimatedSection>
+              );
+            })}
           </div>
 
           <AnimatedSection delay={0.5}>
@@ -257,13 +224,13 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-gradient-golden py-20 sm:py-24">
         {/* Decorative corner accents */}
         <div className="pointer-events-none absolute -right-6 -top-6">
-          <Flower2
+          <IconBloom
             className="h-24 w-24 text-primary opacity-8"
             strokeWidth={0.8}
           />
         </div>
         <div className="pointer-events-none absolute -bottom-4 -left-4">
-          <Leaf
+          <IconLeaf
             className="h-20 w-20 text-primary opacity-8 rotate-180"
             strokeWidth={0.8}
           />
@@ -271,7 +238,7 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
           <AnimatedSection>
-            <PartyPopper className="mx-auto mb-4 h-10 w-10 text-accent-foreground/70" />
+            <IconCelebration className="mx-auto mb-4 h-10 w-10 text-accent-foreground/70" />
 
             <h2 className="font-serif text-3xl font-semibold sm:text-4xl">
               {t("celebrations.title")}
@@ -314,12 +281,12 @@ export default function HomePage() {
         <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <AnimatedSection>
             <div className="text-center">
-              <Clock className="mx-auto mb-3 h-8 w-8 text-primary/60" />
+              <IconTime className="mx-auto mb-3 h-8 w-8 text-primary/60" />
               <h2 className="font-serif text-3xl font-semibold sm:text-4xl">
                 {t("contact.openingHours")}
               </h2>
               <div className="divider-floral mx-auto mt-4 max-w-xs">
-                <Flower2
+                <IconBloom
                   className="h-4 w-4 shrink-0 text-primary/50"
                   strokeWidth={1.5}
                 />

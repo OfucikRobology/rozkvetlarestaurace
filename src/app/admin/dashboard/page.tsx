@@ -23,9 +23,9 @@ import {
   Check,
   X,
   Eye,
-  Flower2,
   Users,
 } from "lucide-react";
+import { IconBloom } from "@/components/icons";
 
 interface Stats {
   totalReservations: number;
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
       <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Flower2 className="h-6 w-6 text-primary" />
+            <IconBloom className="h-6 w-6 text-primary" />
             <h1 className="font-serif text-xl font-bold">Administrace</h1>
           </div>
           <div className="flex items-center gap-2">

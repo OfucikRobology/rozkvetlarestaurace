@@ -28,7 +28,9 @@ import {
   celebrationPackages,
   celebrationThemes,
 } from "@/data/celebrations";
-import { PartyPopper, Send, Check, Star, Sparkles } from "lucide-react";
+import { Send, Check, Star, Sparkles } from "lucide-react";
+import { IconCelebration } from "@/components/icons";
+import { IllustrationWedding, IllustrationParty } from "@/components/illustrations";
 
 export default function CelebrationsPage() {
   const { locale, t } = useLocale();
@@ -87,7 +89,7 @@ export default function CelebrationsPage() {
         <section className="py-20 text-center">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <PartyPopper className="h-10 w-10 text-pink-600" />
+              <IconCelebration className="h-10 w-10 text-pink-600" />
               <h1 className="text-4xl md:text-5xl font-bold text-pink-900">
                 {t("celebrations.title")}
               </h1>
@@ -215,12 +217,12 @@ export default function CelebrationsPage() {
               : "З наших святкувань"}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-            {[1, 2, 3, 4].map((i) => (
+            {[IllustrationWedding, IllustrationParty, IllustrationWedding, IllustrationParty].map((Illustration, i) => (
               <div
                 key={i}
-                className="aspect-square bg-pink-100 rounded-lg flex items-center justify-center"
+                className="aspect-square bg-gradient-to-br from-pink-50 to-rose-50 rounded-lg flex items-center justify-center p-6"
               >
-                <PartyPopper className="h-10 w-10 text-pink-300" />
+                <Illustration className="h-full w-full text-pink-400/70" />
               </div>
             ))}
           </div>

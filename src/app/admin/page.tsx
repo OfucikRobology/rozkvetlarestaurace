@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Lock, Flower2 } from "lucide-react";
+import { Lock } from "lucide-react";
+import { IconBloom } from "@/components/icons";
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
@@ -39,7 +40,7 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <Flower2 className="mx-auto h-12 w-12 text-primary" />
+          <IconBloom className="mx-auto h-12 w-12 text-primary" />
           <CardTitle className="font-serif text-2xl">
             Administrace
           </CardTitle>

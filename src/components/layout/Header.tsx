@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Phone, Flower2 } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
+import { IconBloom } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useLocale } from "@/lib/locale-context";
@@ -18,7 +19,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <Flower2 className="h-8 w-8 text-primary transition-transform group-hover:rotate-12" />
+          <IconBloom className="h-8 w-8 text-primary transition-transform group-hover:rotate-12" />
           <span className="font-serif text-xl font-semibold text-foreground">
             Rozkvetlá
           </span>
@@ -63,7 +64,7 @@ export function Header() {
                   className="flex items-center gap-2 mb-4"
                   onClick={() => setOpen(false)}
                 >
-                  <Flower2 className="h-8 w-8 text-primary" />
+                  <IconBloom className="h-8 w-8 text-primary" />
                   <span className="font-serif text-xl font-semibold">
                     Rozkvetlá
                   </span>

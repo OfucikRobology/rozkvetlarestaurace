@@ -10,15 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { contactInfo, openingHours } from "@/data/restaurant";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Send,
-  Flower2,
-  Navigation,
-} from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Navigation } from "lucide-react";
+import { IconBloom } from "@/components/icons";
 
 export default function ContactPage() {
   const { locale, t } = useLocale();
@@ -62,7 +55,7 @@ export default function ContactPage() {
       <section className="bg-muted/30 py-16">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <AnimatedSection>
-            <Flower2 className="mx-auto mb-4 h-12 w-12 text-primary" />
+            <IconBloom className="mx-auto mb-4 h-12 w-12 text-primary" />
             <h1 className="font-serif text-4xl font-bold text-foreground md:text-5xl">
               {t("contact.title")}
             </h1>
