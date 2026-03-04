@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale } from "@/lib/locale-context";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { featuredItems } from "@/data/menu";
@@ -16,24 +17,13 @@ import {
   DecoLeaf,
   FloralDivider,
 } from "@/components/icons";
-import {
-  IllustrationPlate,
-  IllustrationBowl,
-  IllustrationDumplings,
-  IllustrationCake,
-} from "@/components/illustrations";
 
-/* ──────────────────────────────────────────────
-   Gradient placeholder for menu-card images
-   ────────────────────────────────────────────── */
-const cardGradients = [
-  "from-amber-50/80 via-orange-50/40 to-green-50/50",
-  "from-stone-50/80 via-emerald-50/40 to-amber-50/50",
-  "from-rose-50/60 via-amber-50/40 to-orange-50/50",
-  "from-teal-50/60 via-lime-50/40 to-amber-50/50",
+const menuCardImages = [
+  "/images/menu-1.jpg",
+  "/images/menu-2.jpg",
+  "/images/menu-3.jpg",
+  "/images/menu-4.jpg",
 ];
-
-const cardIllustrations = [IllustrationPlate, IllustrationBowl, IllustrationDumplings, IllustrationCake];
 
 /* ──────────────────────────────────────────────
    Homepage
@@ -167,16 +157,17 @@ export default function HomePage() {
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {featuredItems.map((item, idx) => {
-              const Illustration = cardIllustrations[idx % cardIllustrations.length];
               return (
                 <AnimatedSection key={item.id} delay={0.1 + idx * 0.1}>
                   <div className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
-                    {/* Illustrated placeholder image area */}
-                    <div
-                      className={`relative flex h-44 items-center justify-center bg-gradient-to-br ${cardGradients[idx % cardGradients.length]}`}
-                    >
-                      <Illustration
-                        className="h-28 w-28 text-primary/50 transition-transform group-hover:scale-110"
+                    {/* Food photo */}
+                    <div className="relative h-44 overflow-hidden">
+                      <Image
+                        src={menuCardImages[idx % menuCardImages.length]}
+                        alt={item.name[locale]}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       />
                     </div>
 

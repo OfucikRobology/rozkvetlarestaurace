@@ -30,7 +30,14 @@ import {
 } from "@/data/celebrations";
 import { Send, Check, Star, Sparkles } from "lucide-react";
 import { IconCelebration } from "@/components/icons";
-import { IllustrationWedding, IllustrationParty } from "@/components/illustrations";
+import Image from "next/image";
+
+const oslavyPhotos = [
+  "/images/oslavy-1.jpg",
+  "/images/oslavy-2.jpg",
+  "/images/oslavy-3.jpg",
+  "/images/oslavy-4.jpg",
+];
 
 export default function CelebrationsPage() {
   const { locale, t } = useLocale();
@@ -217,19 +224,25 @@ export default function CelebrationsPage() {
               : "З наших святкувань"}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-            {[IllustrationWedding, IllustrationParty, IllustrationWedding, IllustrationParty].map((Illustration, i) => (
+            {oslavyPhotos.map((src, i) => (
               <div
                 key={i}
-                className="aspect-square bg-gradient-to-br from-pink-50 to-rose-50 rounded-lg flex items-center justify-center p-6"
+                className="relative aspect-square overflow-hidden rounded-lg"
               >
-                <Illustration className="h-full w-full text-pink-400/70" />
+                <Image
+                  src={src}
+                  alt={locale === "cs" ? `Oslava ${i + 1}` : `Святкування ${i + 1}`}
+                  fill
+                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
               </div>
             ))}
           </div>
           <p className="text-center text-sm text-muted-foreground mt-4">
             {locale === "cs"
-              ? "Fotogalerie bude brzy doplnena."
-              : "Фотогалерея буде незабаром додана."}
+              ? "Více fotek najdete v naší galerii."
+              : "Більше фото знайдете в нашій галереї."}
           </p>
         </section>
       </AnimatedSection>
