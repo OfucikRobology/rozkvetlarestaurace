@@ -1,6 +1,18 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy inicializace - Resend se vytvori az pri prvnim pouziti,
+// aby build nepadal kdyz env variable jeste neni nastavena
+let _resend: Resend | null = null;
+
+function getResend(): Resend {
+  if (!_resend) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY neni nastaveny v environment variables");
+    }
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 const FROM_EMAIL = "Rozkvetlá restaurace <noreply@rozkvetlarestaurace.cz>";
 const RESTAURANT_EMAIL = "verunkatarhaj@seznam.cz";
@@ -14,7 +26,7 @@ export async function sendReservationConfirmation(data: {
   note?: string;
 }) {
   // Email klientovi
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: data.email,
     subject: "Potvrzení rezervace – Rozkvetlá restaurace",
@@ -36,7 +48,7 @@ export async function sendReservationConfirmation(data: {
   });
 
   // Email restauraci
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: RESTAURANT_EMAIL,
     subject: `Nová rezervace: ${data.name} – ${data.date} ${data.time}`,
@@ -85,7 +97,7 @@ export async function sendOrderConfirmation(data: {
   `;
 
   if (data.email) {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: data.email,
       subject: "Potvrzení objednávky – Rozkvetlá restaurace",
@@ -94,7 +106,7 @@ export async function sendOrderConfirmation(data: {
   }
 
   // Email restauraci
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: RESTAURANT_EMAIL,
     subject: `Nová objednávka: ${data.name} – vyzvednutí ${data.pickupTime}`,
@@ -121,7 +133,7 @@ export async function sendEventInquiry(data: {
   guests: number;
   message?: string;
 }) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: RESTAURANT_EMAIL,
     subject: `Poptávka akce: ${data.eventType} – ${data.name}`,
@@ -142,7 +154,7 @@ export async function sendEventInquiry(data: {
   });
 
   // Potvrzení klientovi
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: data.email,
     subject: "Poptávka přijata – Rozkvetlá restaurace",
@@ -164,7 +176,7 @@ export async function sendContactMessage(data: {
   subject?: string;
   message: string;
 }) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: RESTAURANT_EMAIL,
     subject: `Zpráva z webu: ${data.subject || "Bez předmětu"} – ${data.name}`,
