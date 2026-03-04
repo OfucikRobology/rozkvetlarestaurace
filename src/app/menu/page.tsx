@@ -1,12 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLocale } from "@/lib/locale-context";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { menuItems } from "@/data/menu";
+import { menuItems as staticMenuItems } from "@/data/menu";
 import {
   UtensilsCrossed,
   Soup,
@@ -17,7 +18,7 @@ import {
   CalendarDays,
   Clock,
 } from "lucide-react";
-import type { MenuCategory } from "@/types";
+import type { MenuItem, MenuCategory } from "@/types";
 
 /* -------------------------------------------------- */
 /*  Category metadata helpers                         */
@@ -106,9 +107,17 @@ const weekDayKeys = [
 
 export default function MenuPage() {
   const { locale, t } = useLocale();
+  const [items, setItems] = useState<MenuItem[]>(staticMenuItems);
+
+  useEffect(() => {
+    fetch("/api/menu")
+      .then((res) => res.json())
+      .then((data) => setItems(data))
+      .catch(() => {}); // Pri chybe zustanou staticka data
+  }, []);
 
   /* Group menu items by category */
-  const grouped = menuItems.reduce<Record<MenuCategory, typeof menuItems>>(
+  const grouped = items.reduce<Record<MenuCategory, typeof items>>(
     (acc, item) => {
       if (!acc[item.category]) {
         acc[item.category] = [];
@@ -116,11 +125,11 @@ export default function MenuPage() {
       acc[item.category].push(item);
       return acc;
     },
-    {} as Record<MenuCategory, typeof menuItems>
+    {} as Record<MenuCategory, MenuItem[]>
   );
 
   /* Helper: render a single menu item card */
-  const renderMenuItem = (item: (typeof menuItems)[number]) => (
+  const renderMenuItem = (item: MenuItem) => (
     <div
       key={item.id}
       className="group flex items-start justify-between gap-4 rounded-xl border border-border/60 bg-card p-4 transition-all hover:border-primary/30 hover:shadow-md sm:p-5"

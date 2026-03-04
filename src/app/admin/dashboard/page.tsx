@@ -24,6 +24,11 @@ import {
   X,
   Eye,
   Users,
+  UtensilsCrossed,
+  Plus,
+  Pencil,
+  Trash2,
+  EyeOff,
 } from "lucide-react";
 import { IconBloom } from "@/components/icons";
 
@@ -78,7 +83,20 @@ interface Message {
   createdAt: string;
 }
 
-type Tab = "overview" | "reservations" | "orders" | "messages";
+interface MenuItemDB {
+  id: string;
+  nameCs: string;
+  nameUk: string;
+  descCs: string;
+  descUk: string;
+  price: number;
+  category: string;
+  allergens: string | null;
+  sortOrder: number;
+  visible: boolean;
+}
+
+type Tab = "overview" | "reservations" | "orders" | "messages" | "menu";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -98,22 +116,40 @@ const STATUS_LABELS: Record<string, string> = {
   ready: "Připraveno",
 };
 
+const CATEGORY_LABELS: Record<string, string> = {
+  appetizers: "Předkrmy",
+  soups: "Polévky",
+  mainCourses: "Hlavní jídla",
+  desserts: "Dezerty",
+  drinks: "Nápoje",
+};
+
+const CATEGORY_ORDER = ["appetizers", "soups", "mainCourses", "desserts", "drinks"];
+
 export default function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
   const [stats, setStats] = useState<Stats | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [menuItemsList, setMenuItemsList] = useState<MenuItemDB[]>([]);
+  const [showMenuForm, setShowMenuForm] = useState(false);
+  const [editingMenuItem, setEditingMenuItem] = useState<MenuItemDB | null>(null);
+  const [menuForm, setMenuForm] = useState({
+    nameCs: "", nameUk: "", descCs: "", descUk: "",
+    price: "", category: "mainCourses", allergens: "",
+  });
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [statsRes, resRes, ordRes, msgRes] = await Promise.all([
+      const [statsRes, resRes, ordRes, msgRes, menuRes] = await Promise.all([
         fetch("/api/admin/stats"),
         fetch("/api/admin/reservations"),
         fetch("/api/admin/orders"),
         fetch("/api/admin/messages"),
+        fetch("/api/admin/menu"),
       ]);
 
       if (statsRes.status === 401) {
@@ -125,6 +161,7 @@ export default function AdminDashboard() {
       setReservations(await resRes.json());
       setOrders(await ordRes.json());
       setMessages(await msgRes.json());
+      if (menuRes.ok) setMenuItemsList(await menuRes.json());
     } catch {
       toast.error("Chyba při načítání dat.");
     } finally {
@@ -186,6 +223,96 @@ export default function AdminDashboard() {
     }
   }
 
+  function openMenuForm(item?: MenuItemDB) {
+    if (item) {
+      setEditingMenuItem(item);
+      setMenuForm({
+        nameCs: item.nameCs, nameUk: item.nameUk,
+        descCs: item.descCs, descUk: item.descUk,
+        price: String(item.price), category: item.category,
+        allergens: item.allergens || "",
+      });
+    } else {
+      setEditingMenuItem(null);
+      setMenuForm({
+        nameCs: "", nameUk: "", descCs: "", descUk: "",
+        price: "", category: "mainCourses", allergens: "",
+      });
+    }
+    setShowMenuForm(true);
+  }
+
+  async function saveMenuItem() {
+    try {
+      const payload = {
+        ...menuForm,
+        price: Number(menuForm.price),
+        allergens: menuForm.allergens || null,
+      };
+
+      if (editingMenuItem) {
+        // Editace
+        const res = await fetch("/api/admin/menu", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingMenuItem.id, ...payload }),
+        });
+        if (res.ok) {
+          toast.success("Položka upravena.");
+          setShowMenuForm(false);
+          fetchData();
+        }
+      } else {
+        // Nova polozka
+        const res = await fetch("/api/admin/menu", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          toast.success("Položka přidána.");
+          setShowMenuForm(false);
+          fetchData();
+        }
+      }
+    } catch {
+      toast.error("Chyba při ukládání.");
+    }
+  }
+
+  async function deleteMenuItem(id: string) {
+    if (!confirm("Opravdu smazat tuto položku?")) return;
+    try {
+      const res = await fetch("/api/admin/menu", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        toast.success("Položka smazána.");
+        fetchData();
+      }
+    } catch {
+      toast.error("Chyba při mazání.");
+    }
+  }
+
+  async function toggleMenuItemVisibility(item: MenuItemDB) {
+    try {
+      const res = await fetch("/api/admin/menu", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: item.id, visible: !item.visible }),
+      });
+      if (res.ok) {
+        toast.success(item.visible ? "Položka skryta." : "Položka zobrazena.");
+        fetchData();
+      }
+    } catch {
+      toast.error("Chyba při aktualizaci.");
+    }
+  }
+
   const formatDate = (d: string) =>
     new Date(d).toLocaleDateString("cs-CZ", {
       day: "numeric",
@@ -239,6 +366,7 @@ export default function AdminDashboard() {
               { key: "reservations", label: "Rezervace", icon: CalendarDays },
               { key: "orders", label: "Objednávky", icon: ShoppingBag },
               { key: "messages", label: "Zprávy", icon: Mail },
+              { key: "menu", label: "Jídelní lístek", icon: UtensilsCrossed },
             ] as const
           ).map(({ key, label, icon: Icon }) => (
             <Button
@@ -656,6 +784,225 @@ export default function AdminDashboard() {
               )}
             </CardContent>
           </Card>
+        )}
+
+        {/* Menu tab */}
+        {tab === "menu" && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <UtensilsCrossed className="h-5 w-5" />
+                    Jídelní lístek
+                  </CardTitle>
+                  <Button size="sm" onClick={() => openMenuForm()}>
+                    <Plus className="h-4 w-4 mr-1" />
+                    Přidat položku
+                  </Button>
+                </div>
+                <CardDescription>
+                  Celkem: {menuItemsList.length} položek
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* Formular pro pridani/editaci */}
+                {showMenuForm && (
+                  <div className="mb-6 border rounded-lg p-4 bg-muted/30">
+                    <h4 className="font-semibold mb-4">
+                      {editingMenuItem ? "Upravit položku" : "Nová položka"}
+                    </h4>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="text-sm font-medium">Název (česky)</label>
+                        <input
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                          value={menuForm.nameCs}
+                          onChange={(e) => setMenuForm({ ...menuForm, nameCs: e.target.value })}
+                          placeholder="Svíčková na smetaně"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Název (ukrajinsky)</label>
+                        <input
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                          value={menuForm.nameUk}
+                          onChange={(e) => setMenuForm({ ...menuForm, nameUk: e.target.value })}
+                          placeholder="Свічкова на сметані"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Popis (česky)</label>
+                        <textarea
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                          rows={2}
+                          value={menuForm.descCs}
+                          onChange={(e) => setMenuForm({ ...menuForm, descCs: e.target.value })}
+                          placeholder="Hovězí svíčková s houskovým knedlíkem"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Popis (ukrajinsky)</label>
+                        <textarea
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                          rows={2}
+                          value={menuForm.descUk}
+                          onChange={(e) => setMenuForm({ ...menuForm, descUk: e.target.value })}
+                          placeholder="Яловичина у вершковому соусі"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Cena (Kč)</label>
+                        <input
+                          type="number"
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                          value={menuForm.price}
+                          onChange={(e) => setMenuForm({ ...menuForm, price: e.target.value })}
+                          placeholder="235"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Kategorie</label>
+                        <select
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm bg-white"
+                          value={menuForm.category}
+                          onChange={(e) => setMenuForm({ ...menuForm, category: e.target.value })}
+                        >
+                          {CATEGORY_ORDER.map((cat) => (
+                            <option key={cat} value={cat}>
+                              {CATEGORY_LABELS[cat]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="text-sm font-medium">Alergeny (čísla oddělená čárkou)</label>
+                        <input
+                          className="w-full mt-1 px-3 py-2 border rounded-md text-sm"
+                          value={menuForm.allergens}
+                          onChange={(e) => setMenuForm({ ...menuForm, allergens: e.target.value })}
+                          placeholder="1,3,7"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-4">
+                      <Button size="sm" onClick={saveMenuItem}>
+                        <Check className="h-4 w-4 mr-1" />
+                        {editingMenuItem ? "Uložit" : "Přidat"}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setShowMenuForm(false)}
+                      >
+                        Zrušit
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Seznam polozek podle kategorii */}
+                {CATEGORY_ORDER.map((category) => {
+                  const items = menuItemsList.filter((i) => i.category === category);
+                  if (items.length === 0) return null;
+
+                  return (
+                    <div key={category} className="mb-6">
+                      <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide mb-3">
+                        {CATEGORY_LABELS[category]} ({items.length})
+                      </h4>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="border-b text-left">
+                              <th className="pb-2 pr-4 font-medium">Název</th>
+                              <th className="pb-2 pr-4 font-medium">Cena</th>
+                              <th className="pb-2 pr-4 font-medium hidden sm:table-cell">Alergeny</th>
+                              <th className="pb-2 pr-4 font-medium">Stav</th>
+                              <th className="pb-2 font-medium">Akce</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {items.map((item) => (
+                              <tr
+                                key={item.id}
+                                className={`border-b last:border-0 ${!item.visible ? "opacity-50" : ""}`}
+                              >
+                                <td className="py-3 pr-4">
+                                  <div className="font-medium">{item.nameCs}</div>
+                                  <div className="text-xs text-muted-foreground">{item.nameUk}</div>
+                                </td>
+                                <td className="py-3 pr-4 font-medium">{item.price} Kč</td>
+                                <td className="py-3 pr-4 hidden sm:table-cell">
+                                  {item.allergens ? (
+                                    <span className="text-xs text-muted-foreground">
+                                      {item.allergens}
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-muted-foreground">—</span>
+                                  )}
+                                </td>
+                                <td className="py-3 pr-4">
+                                  <Badge
+                                    className={
+                                      item.visible
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-gray-100 text-gray-600"
+                                    }
+                                  >
+                                    {item.visible ? "Viditelná" : "Skrytá"}
+                                  </Badge>
+                                </td>
+                                <td className="py-3">
+                                  <div className="flex gap-1">
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="h-7 text-xs"
+                                      onClick={() => openMenuForm(item)}
+                                    >
+                                      <Pencil className="h-3 w-3" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="h-7 text-xs"
+                                      onClick={() => toggleMenuItemVisibility(item)}
+                                      title={item.visible ? "Skrýt" : "Zobrazit"}
+                                    >
+                                      {item.visible ? (
+                                        <EyeOff className="h-3 w-3" />
+                                      ) : (
+                                        <Eye className="h-3 w-3" />
+                                      )}
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="h-7 text-xs text-red-600"
+                                      onClick={() => deleteMenuItem(item.id)}
+                                    >
+                                      <Trash2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {menuItemsList.length === 0 && (
+                  <p className="text-center py-8 text-muted-foreground">
+                    Jídelní lístek je prázdný. Klikněte na &quot;Přidat položku&quot; nebo načtěte stránku znovu pro import výchozích dat.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         )}
       </div>
     </div>
